@@ -6,14 +6,12 @@ import UNDPColorModule from 'undp-viz-colors';
 
 interface Props {
   data: object[];
-  svgWidth: number;
-  svgHeight: number;
 }
 
 export function Graph(props: Props) {
-  const { data, svgWidth, svgHeight } = props;
+  const { data } = props;
   const margin = { top: 20, right: 30, bottom: 50, left: 0 };
-  const graphHeight = svgHeight - margin.top - margin.bottom;
+  const graphHeight = 500 - margin.top - margin.bottom;
   const valueArray: number[] = data.map((d: any) => Number(d.number));
   const percentageData = data.filter(d => (d as any).value === 'percentage');
   const numberData = data.filter(d => (d as any).value === 'number')[0];
@@ -23,7 +21,7 @@ export function Graph(props: Props) {
   return (
     <div>
       {valueArray.length > 0 ? (
-        <svg width={svgWidth} height={svgHeight} id='creditRating'>
+        <svg width='500px' height='500px' id='creditRating'>
           <g transform={`translate(${margin.left},${margin.top})`}>
             <g>
               {stackedData.map((d, i) => (

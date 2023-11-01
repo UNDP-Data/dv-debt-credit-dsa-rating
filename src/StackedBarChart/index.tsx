@@ -25,18 +25,12 @@ export function StackedBarChart(props: Props) {
   //   useState('percentage');
   const [creditDsaSelection, setCreditDsaSelection] = useState('credit');
   const [categorySelection, setCategorySelection] = useState('All developing');
-  const [svgWidth, setSvgWidth] = useState(0);
-  const [svgHeight, setSvgHeight] = useState(0);
+  // const [svgWidth, setSvgWidth] = useState(0);
+  // const [svgHeight, setSvgHeight] = useState(0);
   const graphDiv = useRef<HTMLDivElement>(null);
   const [selectedData, setSelectedData] = useState<object[]>(
     creditData.filter(d => d.region === categorySelection),
   );
-  useEffect(() => {
-    if (graphDiv.current) {
-      setSvgHeight(graphDiv.current.clientHeight);
-      setSvgWidth(graphDiv.current.clientWidth);
-    }
-  }, [graphDiv]);
   useEffect(() => {
     const data =
       creditDsaSelection === 'credit'
@@ -93,13 +87,7 @@ export function StackedBarChart(props: Props) {
             </div>
           </div>
         </div>
-        {svgHeight && svgWidth ? (
-          <Graph
-            data={selectedData}
-            svgWidth={svgWidth}
-            svgHeight={svgHeight}
-          />
-        ) : null}
+        <Graph data={selectedData} />
         <p className='source'>
           Source: Credit rating based on S&P, Moody’s and FITCH long-term
           sovereign credit ratings as of September 3, 2023 accessed through
