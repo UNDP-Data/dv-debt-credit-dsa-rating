@@ -22,20 +22,6 @@ function App() {
       csv('./data/dsaRating.csv'),
       csv('./data/categories.csv'),
     ]).then(([creditData, dsaData, regions]) => {
-      /* const creditDataArray: any[] = [];
-      regions.forEach(region => {
-        const data = creditData.filter(
-          (k: any) => k.region === region.description,
-        );
-        console.log('data', data);
-        const arrayEl = {
-          region: region.description,
-          number: {},
-          percentage: {},
-        };
-        creditDataArray.push(arrayEl);
-      });
-      console.log('creditDataArray', creditDataArray); */
       setCreditRatingData(creditData as any);
       setDsaRatingData(dsaData as any);
       setCategoriesData(regions as any);

@@ -13,8 +13,7 @@ interface Props {
 
 const GraphDiv = styled.div`
   @media (max-width: 960px) {
-    height: 100vw;
-    max-height: 40rem;
+    height: 500px;
   }
 `;
 // const numberPercentOptions = ['number', 'percentage'];
@@ -39,7 +38,6 @@ export function StackedBarChart(props: Props) {
     }
   }, [graphDiv]);
   useEffect(() => {
-    console.log('category Selection', categorySelection);
     const data =
       creditDsaSelection === 'credit'
         ? creditData.filter(d => d.region === categorySelection)

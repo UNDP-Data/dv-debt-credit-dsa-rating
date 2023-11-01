@@ -28,7 +28,10 @@
 }
 .barLabel{
   text-anchor:middle;
-  font-size: 14px;
+  font-size: 0.875rem;
+}
+.chartLabel {
+  font-size: 0.875rem;
 }
 /* color legend styles for charts */
 .legend-container{

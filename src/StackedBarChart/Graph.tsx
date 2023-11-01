@@ -1,8 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { useEffect } from 'react';
 import { scaleLinear } from 'd3-scale';
-import { max } from 'd3-array';
 import { stack } from 'd3-shape';
 import UNDPColorModule from 'undp-viz-colors';
 
@@ -15,62 +13,60 @@ interface Props {
 export function Graph(props: Props) {
   const { data, svgWidth, svgHeight } = props;
   const margin = { top: 20, right: 30, bottom: 50, left: 0 };
-  const graphWidth = svgWidth - margin.left - margin.right;
-  // const graphHeight = svgHeight - margin.top - margin.bottom;
-
+  const graphHeight = svgHeight - margin.top - margin.bottom;
   const valueArray: number[] = data.map((d: any) => Number(d.number));
-  const maxParam = max(valueArray) ? max(valueArray) : 0;
-  console.log(maxParam);
   const percentageData = data.filter(d => (d as any).value === 'percentage');
   const numberData = data.filter(d => (d as any).value === 'number')[0];
   const subgroups = Object.keys(data[0]).slice(2);
-  console.log('filteredData', percentageData);
-  console.log('numberData', numberData);
-  console.log('subgroups', subgroups);
   const stackedData = stack().keys(subgroups)(percentageData as any);
-  console.log('stacked', stackedData);
-  const x = scaleLinear()
-    // .domain([0, maxParam as number])
-    .domain([0, 100])
-    .range([0, graphWidth])
-    .nice();
+  const y = scaleLinear().domain([0, 100]).range([0, graphHeight]).nice();
   return (
     <div>
       {valueArray.length > 0 ? (
-        <svg
-          width='100%'
-          height='100%'
-          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          id='creditRating'
-        >
+        <svg width={svgWidth} height={svgHeight} id='creditRating'>
           <g transform={`translate(${margin.left},${margin.top})`}>
             <g>
               {stackedData.map((d, i) => (
                 <g key={i}>
                   <rect
-                    x={x(d[0][0])}
-                    y={20}
-                    width={x(d[0][1] - d[0][0])}
-                    height={100}
-                    fill={UNDPColorModule.categoricalColors.colors[i]}
+                    y={y(d[0][0])}
+                    x={120}
+                    height={y(d[0][1] - d[0][0])}
+                    width={100}
+                    fill={UNDPColorModule.sequentialColors.negativeColorsx05[i]}
                     opacity={0.8}
                   />
-                  <text
-                    textAnchor='middle'
-                    x={x(d[0][0]) + x(d[0][1] - d[0][0]) / 2}
-                    y={10}
-                  >
-                    {`${Math.round((numberData as any)[d.key])} ${(
-                      d[0][1] - d[0][0]
-                    ).toFixed(2)}% `}
-                  </text>
-                  <text
-                    textAnchor='middle'
-                    x={x(d[0][0]) + x(d[0][1] - d[0][0]) / 2}
-                    y={40}
-                  >
-                    {d.key}
-                  </text>
+                  {(numberData as any)[d.key] > 0 ? (
+                    <>
+                      <text
+                        textAnchor='end'
+                        className='chartLabel'
+                        y={y(d[0][0]) + y(d[0][1] - d[0][0]) / 2}
+                        x={110}
+                      >
+                        {`${(d[0][1] - d[0][0]).toFixed(2)}% `}
+                      </text>
+                      <text
+                        textAnchor='end'
+                        className='chartLabel'
+                        y={y(d[0][0]) + y(d[0][1] - d[0][0]) / 2 + 15}
+                        x={110}
+                      >
+                        {`${Math.round((numberData as any)[d.key])}  ${
+                          (numberData as any)[d.key] > 1
+                            ? 'countries'
+                            : 'country'
+                        }`}
+                      </text>
+                      <text
+                        className='label'
+                        y={y(d[0][0]) + y(d[0][1] - d[0][0]) / 2 + 5}
+                        x={230}
+                      >
+                        {d.key}
+                      </text>
+                    </>
+                  ) : null}
                 </g>
               ))}
             </g>
