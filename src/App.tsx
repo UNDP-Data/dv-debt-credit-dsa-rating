@@ -2,16 +2,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { csv } from 'd3-fetch';
 import { useEffect, useState } from 'react';
-import { CategoryData, RatingType } from './Types';
+import { CategoryData, CreditRatingType, DsaRatingType } from './Types';
 import { StackedBarChart } from './StackedBarChart';
 import './style.css';
 
 function App() {
   const [creditRatingData, setCreditRatingData] = useState<
-    RatingType[] | undefined
+    CreditRatingType[] | undefined
   >();
   const [dsaRatingData, setDsaRatingData] = useState<
-    RatingType[] | undefined
+    DsaRatingType[] | undefined
   >();
   const [categoriesData, setCategoriesData] = useState<
     CategoryData[] | undefined
@@ -22,7 +22,7 @@ function App() {
       csv('./data/dsaRating.csv'),
       csv('./data/categories.csv'),
     ]).then(([creditData, dsaData, regions]) => {
-      const creditDataArray = [];
+      /* const creditDataArray: any[] = [];
       regions.forEach(region => {
         const data = creditData.filter(
           (k: any) => k.region === region.description,
@@ -35,6 +35,7 @@ function App() {
         };
         creditDataArray.push(arrayEl);
       });
+      console.log('creditDataArray', creditDataArray); */
       setCreditRatingData(creditData as any);
       setDsaRatingData(dsaData as any);
       setCategoriesData(regions as any);

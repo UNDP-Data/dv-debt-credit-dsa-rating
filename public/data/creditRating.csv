@@ -1,6 +1,35 @@
-region,category,number,percentage
-All developing,Investment grade,11,18.6
-All developing,Non-investment grade,13,22
-All developing,Highly speculative,18,30.5
-All developing,Substantial risk or extremely speculative ,6,10.2
-All developing,In default,11,18.6
+region,value,Investment grade,Non-investment grade,Highly speculative,Substantial risk or extremely speculative,In default
+All developing,number,11.00,15.00,14.00,8.00,11.00
+All developing,percentage,18.64,25.42,23.73,13.56,18.64
+LIC,number,0.00,0.00,2.00,2.00,1.00
+LIC,percentage,0.00,0.00,40.00,40.00,20.00
+LMC,number,3.00,5.00,8.00,4.00,5.00
+LMC,percentage,12.00,20.00,32.00,16.00,20.00
+UMC,number,8.00,10.00,4.00,2.00,4.00
+UMC,percentage,28.57,35.71,14.29,7.14,14.29
+MIC,number,11.00,15.00,12.00,6.00,9.00
+MIC,percentage,20.75,28.30,22.64,11.32,16.98
+LDC,number,0.00,1.00,3.00,2.00,1.00
+LDC,percentage,0.00,14.29,42.86,28.57,14.29
+SIDS,number,1.00,2.00,1.00,0.00,2.00
+SIDS,percentage,16.67,33.33,16.67,0.00,33.33
+EM,number,21.00,12.00,10.00,5.00,8.00
+EM,percentage,37.50,21.43,17.86,8.93,14.29
+LIDC,number,0.00,4.00,6.00,3.00,3.00
+LIDC,percentage,0.00,25.00,37.50,18.75,18.75
+Poorest,number,0.00,3.00,6.00,4.00,5.00
+Poorest,percentage,0.00,16.67,33.33,22.22,27.78
+HIPC,number,0.00,1.00,5.00,3.00,3.00
+HIPC,percentage,0.00,8.33,41.67,25.00,25.00
+South Asia,number,1.00,1.00,0.00,1.00,1.00
+South Asia,percentage,25.00,25.00,0.00,25.00,25.00
+Europe & Central Asia,number,31.00,6.00,1.00,0.00,2.00
+Europe & Central Asia,percentage,77.50,15.00,2.50,0.00,5.00
+Middle East & North Africa,number,6.00,2.00,4.00,1.00,1.00
+Middle East & North Africa,percentage,42.86,14.29,28.57,7.14,7.14
+East Asia & Pacific,number,11.00,1.00,1.00,0.00,0.00
+East Asia & Pacific,percentage,84.62,7.69,7.69,0.00,0.00
+Latin America & Caribbean,number,6.00,5.00,4.00,2.00,4.00
+Latin America & Caribbean,percentage,28.57,23.81,19.05,9.52,19.05
+Sub-Saharan Africa,number,0.00,2.00,6.00,4.00,3.00
+Sub-Saharan Africa,percentage,0.00,13.33,40.00,26.67,20.00

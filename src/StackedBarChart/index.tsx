@@ -2,43 +2,53 @@
 import { useEffect, useRef, useState } from 'react';
 import { Select, Radio, RadioChangeEvent } from 'antd';
 import styled from 'styled-components';
-import { ratingType, CategoryData } from '../Types';
+import { CategoryData, CreditRatingType, DsaRatingType } from '../Types';
 import { Graph } from './Graph';
 
 interface Props {
-  creditData: ratingType[];
-  dsaData: ratingType[];
+  creditData: CreditRatingType[];
+  dsaData: DsaRatingType[];
   categories: CategoryData[];
 }
 
 const GraphDiv = styled.div`
-  flex-grow: 1;
-  height: 800px;
   @media (max-width: 960px) {
-    height: 70vw;
-    max-height: 31.25rem;
+    height: 100vw;
+    max-height: 40rem;
   }
 `;
-const numberPercentOptions = ['number', 'percentage'];
+// const numberPercentOptions = ['number', 'percentage'];
 const creditDsaOptions = ['credit', 'dsa'];
 
 export function StackedBarChart(props: Props) {
   const { dsaData, creditData, categories } = props;
-  const [totalPercentSelection, setTotalPercentSelection] = useState('number');
+  // const [totalPercentSelection, setTotalPercentSelection] =
+  //   useState('percentage');
   const [creditDsaSelection, setCreditDsaSelection] = useState('credit');
   const [categorySelection, setCategorySelection] = useState('All developing');
   const [svgWidth, setSvgWidth] = useState(0);
   const [svgHeight, setSvgHeight] = useState(0);
   const graphDiv = useRef<HTMLDivElement>(null);
-  const [selectedData, setSelectedData] = useState([]);
+  const [selectedData, setSelectedData] = useState<object[]>(
+    creditData.filter(d => d.region === categorySelection),
+  );
   useEffect(() => {
     if (graphDiv.current) {
       setSvgHeight(graphDiv.current.clientHeight);
       setSvgWidth(graphDiv.current.clientWidth);
     }
   }, [graphDiv]);
+  useEffect(() => {
+    console.log('category Selection', categorySelection);
+    const data =
+      creditDsaSelection === 'credit'
+        ? creditData.filter(d => d.region === categorySelection)
+        : dsaData.filter(d => d.region === categorySelection);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setSelectedData(data as any);
+  }, [categorySelection, creditDsaSelection]);
   return (
-    <GraphDiv ref={graphDiv} style={{ maxWidth: '900px', maxHeight: '600px' }}>
+    <GraphDiv ref={graphDiv}>
       <div>
         <div className='margin-bottom-05'>
           <div>
@@ -46,7 +56,7 @@ export function StackedBarChart(props: Props) {
             <Select
               options={categories.map(d => ({
                 label: d.description,
-                value: d.description,
+                value: d.category,
               }))}
               className='undp-select'
               style={{ width: '100%' }}
@@ -71,28 +81,9 @@ export function StackedBarChart(props: Props) {
           <div className='flex-div flex-space-between flex-wrap'>
             <div>
               <Radio.Group
-                defaultValue={totalPercentSelection}
-                onChange={(el: RadioChangeEvent) => {
-                  setTotalPercentSelection(el.target.value);
-                }}
-              >
-                {numberPercentOptions.map((d, i) => (
-                  <Radio key={i} className='undp-radio' value={d}>
-                    {d}
-                  </Radio>
-                ))}
-              </Radio.Group>
-            </div>
-            <div>
-              <Radio.Group
                 defaultValue={creditDsaSelection}
                 onChange={(el: RadioChangeEvent) => {
                   setCreditDsaSelection(el.target.value);
-                  const data =
-                    creditDsaSelection === 'credit' ? dsaData : creditData;
-                  setSelectedData(
-                    data.filter(d => d.region === categorySelection),
-                  );
                 }}
               >
                 {creditDsaOptions.map((d, i) => (
@@ -107,12 +98,19 @@ export function StackedBarChart(props: Props) {
         {svgHeight && svgWidth ? (
           <Graph
             data={selectedData}
-            totalPercentOption={totalPercentSelection}
             svgWidth={svgWidth}
             svgHeight={svgHeight}
           />
         ) : null}
-        <p className='source'>Source:</p>
+        <p className='source'>
+          Source: Credit rating based on S&P, Moody’s and FITCH long-term
+          sovereign credit ratings as of September 3, 2023 accessed through
+          Trading Economics. Note: Numerical rating is obtained using the
+          ratings scale in Jensen (2022) and as a simple average across ratings.
+          <br />
+          DSA rating based on latest DSA ratings published by the IMF as of June
+          30, 2023.
+        </p>
       </div>
     </GraphDiv>
   );

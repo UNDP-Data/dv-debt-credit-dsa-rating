@@ -4,38 +4,36 @@
 import { scaleLinear } from 'd3-scale';
 import { max } from 'd3-array';
 import { stack } from 'd3-shape';
-// import { select } from 'd3-selection';
 import UNDPColorModule from 'undp-viz-colors';
-import { RatingType } from '../Types';
 
 interface Props {
-  data: RatingType[];
-  totalPercentOption: string;
+  data: object[];
   svgWidth: number;
   svgHeight: number;
 }
 
 export function Graph(props: Props) {
-  const { data, totalPercentOption, svgWidth, svgHeight } = props;
-  const margin = { top: 20, right: 30, bottom: 50, left: 80 };
+  const { data, svgWidth, svgHeight } = props;
+  const margin = { top: 20, right: 30, bottom: 50, left: 0 };
   const graphWidth = svgWidth - margin.left - margin.right;
-  const graphHeight = svgHeight - margin.top - margin.bottom;
-  const minParam = 0;
+  // const graphHeight = svgHeight - margin.top - margin.bottom;
 
   const valueArray: number[] = data.map((d: any) => Number(d.number));
   const maxParam = max(valueArray) ? max(valueArray) : 0;
-  // const groups = data.map(d => d.region);
-  const subgroups = data.map(d => d.category);
-  const stackedData = stack().keys(subgroups)(data);
+  console.log(maxParam);
+  const percentageData = data.filter(d => (d as any).value === 'percentage');
+  const numberData = data.filter(d => (d as any).value === 'number')[0];
+  const subgroups = Object.keys(data[0]).slice(2);
+  console.log('filteredData', percentageData);
+  console.log('numberData', numberData);
+  console.log('subgroups', subgroups);
+  const stackedData = stack().keys(subgroups)(percentageData as any);
   console.log('stacked', stackedData);
   const x = scaleLinear()
-    .domain([minParam as number, maxParam as number])
-    .range([graphWidth, 0])
+    // .domain([0, maxParam as number])
+    .domain([0, 100])
+    .range([0, graphWidth])
     .nice();
-
-  /* useEffect(() => {
-
-  }, [data]); */
   return (
     <div>
       {valueArray.length > 0 ? (
@@ -54,23 +52,29 @@ export function Graph(props: Props) {
                     y={20}
                     width={x(d[0][1] - d[0][0])}
                     height={100}
-                    fill={UNDPColorModule.categoricalColors.colors[0]}
+                    fill={UNDPColorModule.categoricalColors.colors[i]}
                     opacity={0.8}
                   />
+                  <text
+                    textAnchor='middle'
+                    x={x(d[0][0]) + x(d[0][1] - d[0][0]) / 2}
+                    y={10}
+                  >
+                    {`${Math.round((numberData as any)[d.key])} ${(
+                      d[0][1] - d[0][0]
+                    ).toFixed(2)}% `}
+                  </text>
+                  <text
+                    textAnchor='middle'
+                    x={x(d[0][0]) + x(d[0][1] - d[0][0]) / 2}
+                    y={40}
+                  >
+                    {d.key}
+                  </text>
                 </g>
               ))}
             </g>
           </g>
-          <text
-            x={-graphHeight / 2}
-            y='20'
-            transform='rotate(-90)'
-            textAnchor='middle'
-          >
-            {totalPercentOption === 'percentage'
-              ? 'Percentage of countries'
-              : 'Number of countries'}
-          </text>
         </svg>
       ) : (
         <div className='center-area-error-el'>No data available</div>
